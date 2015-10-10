@@ -1,6 +1,8 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <numeric> 
+#define MODULO 1000000007
 using namespace std;
 
 long int nChoosek(int n, int k){
@@ -8,17 +10,19 @@ long int nChoosek(int n, int k){
     if (k * 2 > n) k = n-k;
     if (k == 0) return 1;
     long int result = n;
-    for( int i = 2; i <= k; ++i ) {
+    for( int i = 2; i <= k; i++ ) {
         result *= (n-i+1);
         result /= i;
-        result%=1000000007;
+        result%=MODULO;
     }
     return result;
 }
 
-long long int allpermutation(string s, const vector<int> &d){
+long long int allpermutation(const vector<int> &d){
+	int n = accumulate(d.begin(),d.end(),0);
+	if(n==1)
+		return 1;
 	//total number of letters
-	int n = s.size();
 	long long int combinations = 1;
 	//calculater all permutation O(n);
 	int i = 0;
@@ -28,8 +32,7 @@ long long int allpermutation(string s, const vector<int> &d){
 			n -= d[i];	
 		}
 		i++;
-		if(combinations>1000000007)
-			combinations%=1000000007;
+		combinations%=MODULO;
 	}
 	return combinations;	
 }
@@ -37,25 +40,30 @@ long long int allpermutation(string s, const vector<int> &d){
 int get_rank_helper(string w, vector<int> &d) {
 	if(w.size()==1)
 		return 0;
-	long int rank = 0;
-	int lessthan = 0;
 	if(w[0]>'a'){
+		int lessthan = 0;
+		int temp = 0;
+		vector<int> dd;
 		for(int i = 0; i<(w[0]-'a');i++){
-			if(d[i]>0)
-				lessthan++;
+			//lessthan indicates # of letters that is prior to w[0]
+			if(d[i]>0){
+				dd = d;// a copy of original dictionary
+				dd[i]-=1;
+				temp += allpermutation(dd);//number of permutations with d[i] as the first letter
+			}
 		}
 		d[w[0]-'a']--;
-		return (lessthan*allpermutation(w.substr(1), d)+get_rank_helper(w.substr(1), d))%1000000007;
-	}else{
+		return (temp+get_rank_helper(w.substr(1), d))%MODULO;
+	}else{//w[0]=='a'
 		d[0]--;
-		return get_rank_helper(w.substr(1), d)%1000000007;
+		return get_rank_helper(w.substr(1), d);
 	}
 }
 
 vector<int> get_rank(vector<string> words){
 	vector<int> answer;
 	for(auto w:words){
-		//count # of occurance O(n);
+		//count # of occurance of each letter
 		vector<int> dictionary(26,0);
 		for(auto &c:w){
 			dictionary[c-'a']++;
@@ -66,11 +74,11 @@ vector<int> get_rank(vector<string> words){
 }
 
 int main(){
-	string mystr = "axaelixedhtshsixbuzouqtjrkpyafthezfuehcovcqlbvmkbrwxhzrxymricmehktxepyxomxcx";
+	string mystr = "bombay";//axaelixedhtshsixbuzouqtjrkpyafthezfuehcovcqlbvmkbrwxhzrxymricmehktxepyxomxcx";
 	vector<string> myvec;
 	myvec.push_back(mystr);
 	vector<int> sol = get_rank(myvec);
 	for(int &ans:sol)
-		cout << ans << endl;
+		cout << "ans: " << ans << endl;
 	return 0;
 }
