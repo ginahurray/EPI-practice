@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <numeric> 
-#define MODULO 1000000007
+#define _MODULO 1000000007
 using namespace std;
 
 long int nChoosek(int n, int k){
@@ -13,7 +13,7 @@ long int nChoosek(int n, int k){
     for( int i = 2; i <= k; i++ ) {
         result *= (n-i+1);
         result /= i;
-        result%=MODULO;
+        result%=_MODULO;
     }
     return result;
 }
@@ -32,7 +32,7 @@ long long int allpermutation(const vector<int> &d){
 			n -= d[i];	
 		}
 		i++;
-		combinations%=MODULO;
+		combinations%=_MODULO;
 	}
 	return combinations;	
 }
@@ -50,13 +50,14 @@ int get_rank_helper(string w, vector<int> &d) {
 				dd = d;// a copy of original dictionary
 				dd[i]-=1;
 				temp += allpermutation(dd);//number of permutations with d[i] as the first letter
+				temp%=_MODULO;//number of permutations with d[i] as the first letter
 			}
 		}
 		d[w[0]-'a']--;
-		return (temp+get_rank_helper(w.substr(1), d))%MODULO;
+		return (temp+get_rank_helper(w.substr(1), d))%_MODULO;
 	}else{//w[0]=='a'
 		d[0]--;
-		return get_rank_helper(w.substr(1), d);
+		return get_rank_helper(w.substr(1), d)%_MODULO;
 	}
 }
 
@@ -74,7 +75,7 @@ vector<int> get_rank(vector<string> words){
 }
 
 int main(){
-	string mystr = "bombay";//axaelixedhtshsixbuzouqtjrkpyafthezfuehcovcqlbvmkbrwxhzrxymricmehktxepyxomxcx";
+	string mystr = "axaelixedhtshsixbuzouqtjrkpyafthezfuehcovcqlbvmkbrwxhzrxymricmehktxepyxomxcx";
 	vector<string> myvec;
 	myvec.push_back(mystr);
 	vector<int> sol = get_rank(myvec);
