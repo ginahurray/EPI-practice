@@ -42,7 +42,7 @@ int get_rank_helper(string w, vector<int> &d) {
 		return 0;
 	if(w[0]>'a'){
 		int lessthan = 0;
-		int temp = 0;
+		long long int temp = 0;
 		vector<int> dd;
 		for(int i = 0; i<(w[0]-'a');i++){
 			//lessthan indicates # of letters that is prior to w[0]
@@ -80,6 +80,6 @@ int main(){
 	myvec.push_back(mystr);
 	vector<int> sol = get_rank(myvec);
 	for(int &ans:sol)
-		cout << "ans: " << ans << endl;
+		cout << ans << endl;
 	return 0;
 }
