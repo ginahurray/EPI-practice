@@ -11,12 +11,11 @@ struct TreeNode{
 
 void find_first_larger(TreeNode *root, int key){
 	bool absent = true;
-	vector<int> mypath;
+	TreeNode *answer = NULL;
 	TreeNode *p = root;
 	while(p!=NULL){
 		if(p->val>key){
-			if(!absent)
-				mypath.push_back(p->val);
+			answer = p;
 			p = p->left;
 		}else if(p->val==key){
 			absent = false;
@@ -26,11 +25,10 @@ void find_first_larger(TreeNode *root, int key){
 		}
 	}
 	
-	if(absent | mypath.empty())
+	if(absent)
 		cout << "NULL"<< endl;
 	else{
-		sort(mypath.begin(),mypath.end());
-		cout << mypath[0] << endl;
+		cout << answer->val << endl;
 	}
 }
 
@@ -53,6 +51,6 @@ int main(){
 	q->left->right->left->left = new TreeNode(24);
 	q->left->right->left->right = new TreeNode(31);
 	q->right->right = new TreeNode(53);
- 	find_first_larger(head, 32);
+ 	find_first_larger(head, 2);
 	return 0;
 }
